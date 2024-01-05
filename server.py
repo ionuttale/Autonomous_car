@@ -3,7 +3,8 @@ import socket
 import struct
 import numpy as np
 import lane_detect
-import utils
+import warnings
+import execute_command
 
 class Server(object):
     
@@ -11,10 +12,12 @@ class Server(object):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
     def start_server(self):
-        server_address = ('192.168.1.165', 5555)  # Adresa IP a laptopului și portul de comunicare
+        server_address = ('192.168.0.141', 5555)  # Adresa IP a laptopului și portul de comunicare
         self.server_socket.bind(server_address)
         self.server_socket.listen(1)
         print('Connecting...')
+        result = execute_command.execute_on_raspberry_pi('192.168.0.124', 'ionut', 'Cavaler19', 'python3 /home/ionut/F09/main.py')
+        print(result)
         self.connection, self.client_address = self.server_socket.accept()
         
     def receive_frame(self):
@@ -54,6 +57,7 @@ class Server(object):
         self.server_socket.close()
         self.connection.close()
         cv.destroyAllWindows()
+
         
 server = Server()
 server.start_server()
@@ -62,9 +66,8 @@ try:
     while server.receive_frame() == True:
         receive = server.receive_data()
         angle = lane_detect.get_steering_angle(server.frame, server.data)
+        #print(angle)
         server.send(angle)
-        
-        cv.imshow('Frame', server.frame)
         
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
