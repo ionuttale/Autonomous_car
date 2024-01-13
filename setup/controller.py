@@ -24,12 +24,6 @@ class Controller(object):
         #self.front_wheels.turning_offset = 0
         self.front_wheels.turn(90)
         
-    def __enter__(self):
-        return self
-    
-    def __exit__(self):
-        self.cleanup()
-        
     def cleanup(self):
         self.back_wheels.speed = 0
         self.front_wheels.turn(90)
@@ -42,12 +36,11 @@ class Controller(object):
         self.__curent_speed = speed
         
     def update_steering_angle(self, angle: float):
-        if angle < 45:
-            angle = 45
+        if angle < 50:
+            angle = 50
 
-        if angle > 135:
-            angle = 135
-
+        if angle > 130:
+            angle = 130
         self.front_wheels.turn(angle)
         self.__current_steering_angle = angle
 

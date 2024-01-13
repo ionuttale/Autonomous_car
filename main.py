@@ -23,19 +23,21 @@ class Car(object):
             self.server.send(current_angle)
             
             new_angle = self.server.receive()
-            self.controller.update_steering_angle(new_angle)
+            #self.controller.update_camera_angle(new_angle)
+            if new_angle > 100 or new_angle < 80:
+                self.controller.update_speed(1.6)
+            else:
+                self.controller.update_speed(2)
             
-            #if abs(steering_angle-90) >= 15:
-            #    self.controller.update_speed(1.5)
-            #else:
-            #    self.controller.update_speed(1.7)
+            self.controller.update_steering_angle(new_angle)
+
             #self.controller.update_speed(0)
         
         
     def stop(self):
         self.controller.update_speed(0)
-        self.controller.cleanup()
-        
+        self.controller.cleanup() 
+
 car = Car()
 try:
     car.drive()

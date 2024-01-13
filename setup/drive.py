@@ -1,6 +1,6 @@
 import cv2 as cv
 from controller import Controller
-from lane_detect import Lane_detect
+import lane_detect
 from camera import Capture_video
 
 class Car(object):
@@ -9,7 +9,7 @@ class Car(object):
         self.current_wheel_angle = 90
         self.video = Capture_video()
         self.controller = Controller(20)
-        self.lane_detect = Lane_detect()
+        self.lane_detect = lane_detect
         
     def drive(self):
         
@@ -24,12 +24,14 @@ class Car(object):
 
             #print(steering_angle)
             
+            if steering_angle > 105 or steering_angle < 75:
+                self.controller.update_speed(1.7)
+            else:
+                self.controller.update_speed(2.5)
+
             if cv.waitKey(1) & 0xFF == ord('q'):
                 break
-            #if abs(steering_angle-90) >= 15:
-            #    self.controller.update_speed(1.5)
-            #else:
-            #    self.controller.update_speed(1.7)
+            
             #self.controller.update_speed(0)
         
         self.controller.update_speed(0)

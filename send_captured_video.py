@@ -9,7 +9,7 @@ class Server(object):
     
     def connect(self):
         
-        server_address = ('192.168.1.165', 5555)  # Adresa IP și portul la care laptopul ascultă conexiuni
+        server_address = ('your_laptop_ip', 5555)  # Adresa IP și portul la care laptopul ascultă conexiuni
         self.server_socket.connect(server_address) 
     
     def send_frame(self, frame):
