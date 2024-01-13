@@ -3,7 +3,6 @@ import socket
 import struct
 import numpy as np
 import lane_detect
-import warnings
 import execute_command
 
 class Server(object):
@@ -12,13 +11,14 @@ class Server(object):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
     def start_server(self):
-        server_address = ('192.168.0.141', 5555)  # Adresa IP a laptopului și portul de comunicare
+        server_address = ('laptop ip', 5555) 
         self.server_socket.bind(server_address)
-        self.server_socket.listen(1)
+        self.server_socket.listen(2)
         print('Connecting...')
-        result = execute_command.execute_on_raspberry_pi('192.168.0.124', 'ionut', 'Cavaler19', 'python3 /home/ionut/F09/main.py')
+        result = execute_command.execute_on_raspberry_pi('raspberrypi_ip', 'your_username', 'your_password', 'python3 /home/ionut/F09/main.py')
         print(result)
         self.connection, self.client_address = self.server_socket.accept()
+        print("ceva")
         
     def receive_frame(self):
         data = self.connection.recv(4)

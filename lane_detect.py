@@ -37,7 +37,7 @@ def extract_lines_segments(region_of_interest):
     rho = 1
     angle = np.pi / 180
     min_threshold = 12
-    lines_segments = cv.HoughLinesP(region_of_interest, rho, angle, min_threshold, np.array([]), minLineLength = 10, maxLineGap = 4)
+    lines_segments = cv.HoughLinesP(region_of_interest, rho, angle, min_threshold, np.array([]), minLineLength = 12, maxLineGap = 4)
 
     return lines_segments 
     
@@ -45,7 +45,7 @@ def make_points(frame, average):
     height, width = frame.shape[:2]
     slope, intercept = average
     y1 = height
-    y2 = 210
+    y2 = 200
     
     x1 = max(-width, min(2*width, int((y1-intercept)/slope)))
     x2 = max(-width, min(2*width, int((y2-intercept)/slope)))
@@ -114,12 +114,12 @@ def compute_steering_angle(frame, lane_lines):
         left_x1, left_y1, left_x2, left_y2 = lane_lines[0][0]
         right_x1, right_y1, right_x2, right_y2 = lane_lines[1][0]
             
-        camera_mid_offset_percent = 0.045
+        camera_mid_offset_percent = 0.045   
         mid = int(width / 2 * (1 + camera_mid_offset_percent))
         x_offset = (left_x2 + right_x2) / 2 - mid
 
         
-    y_offset = height - 210
+    y_offset = height - 250
         
     angle_to_mid_radian = math.atan(x_offset / y_offset)
     angle_to_mid_deg = int(angle_to_mid_radian * 180.0 / math.pi)
@@ -129,9 +129,9 @@ def compute_steering_angle(frame, lane_lines):
 def stabilize_steering_angle(current_steering_angle, new_steering_angle, num_of_lane_lines):
         
     if num_of_lane_lines == 2:
-        max_angle_deviation = 15
+        max_angle_deviation = 5
     else:
-        max_angle_deviation = 1.05
+        max_angle_deviation = 0.01
         
     angle_deviation = new_steering_angle - current_steering_angle
         
